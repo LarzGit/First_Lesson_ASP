@@ -24,6 +24,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWJvdXRcQWJvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/lalal/source/repos/First_Lesson_ASP/First_Lesson_ASP/Views/About/ContactUs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWJvdXRcQ29udGFjdFVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/lalal/source/repos/First_Lesson_ASP/First_Lesson_ASP/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -36,8 +40,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lalal/source/repos/First_Lesson_ASP/First_Lesson_ASP/Views/Shared/Compinent/LogoSite/LogoSite.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBpbmVudFxMb2dvU2l0ZVxMb2dvU2l0ZS5jc2h0bWw=
+[C:/Users/lalal/source/repos/First_Lesson_ASP/First_Lesson_ASP/Views/Shared/Components/ContactEmail/ContactEmail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcQ29udGFjdEVtYWlsXENvbnRhY3RFbWFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lalal/source/repos/First_Lesson_ASP/First_Lesson_ASP/Views/Shared/Components/ContactNumber/ContactNumber.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcQ29udGFjdE51bWJlclxDb250YWN0TnVtYmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lalal/source/repos/First_Lesson_ASP/First_Lesson_ASP/Views/Shared/Components/InstagramFeed/InstagramFeed.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcSW5zdGFncmFtRmVlZFxJbnN0YWdyYW1GZWVkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lalal/source/repos/First_Lesson_ASP/First_Lesson_ASP/Views/Shared/Components/LogoSite/LogoSite.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcTG9nb1NpdGVcTG9nb1NpdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/lalal/source/repos/First_Lesson_ASP/First_Lesson_ASP/Views/Shared/Error.cshtml]
