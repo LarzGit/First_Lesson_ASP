@@ -32,3 +32,4 @@ C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\r
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\First_Lesson_ASP.pdb
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\First_Lesson_ASP.genruntimeconfig.cache
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\ref\First_Lesson_ASP.dll
+C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\First_Lesson_ASP.sourcelink.json

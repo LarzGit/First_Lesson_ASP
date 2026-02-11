@@ -23,10 +23,7 @@ namespace First_Lesson_ASP.Controllers
         {
             return View();
         }
-        public IActionResult About()
-        {
-            return View();
-        }
+    
         public IActionResult Privacy()
         {
             return View();
