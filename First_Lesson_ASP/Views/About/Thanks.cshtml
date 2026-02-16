@@ -1,0 +1,23 @@
+﻿@model First_Lesson_ASP.Entities.ClientMessage
+
+@{
+    ViewData["Title"] = "Дякуємо!";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Hero Start -->
+<div class="container-fluid p-5 mb-5 bg-dark text-secondary">
+    <div class="container wow fadeIn" data-wow-delay="0.1s">
+        <h1 class="display-1 text-secondary text-center mb-0">Thank You!</h1>
+    </div>
+</div>
+<!-- Hero End -->
+
+<div class="container py-5 text-center wow fadeIn" data-wow-delay="0.3s">
+    <h2 class="display-4 mb-4">Дякуємо, @Model.Name!</h2>
+    <p class="lead mb-5">
+        Ваше повідомлення успішно надіслано.<br>
+        Ми зв'яжемося з вами найближчим часом.
+    </p>
+    <a href="/" class="btn btn-primary py-3 px-5">Повернутися на головну</a>
+</div>
