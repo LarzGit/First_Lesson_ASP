@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using First_Lesson_ASP.DB;  // ? обов'язково додай цей using
+
 namespace First_Lesson_ASP
 {
     public class Program
@@ -6,16 +9,23 @@ namespace First_Lesson_ASP
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Додаємо підтримку контролерів та представлень (MVC)
             builder.Services.AddControllersWithViews();
+
+            // Реєстрація контексту бази даних
+            // Використовуємо існуючий ключ "RestDBConection" з appsettings.json
+            builder.Services.AddDbContext<RestDBContext>(options =>
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("RestDBConection")
+                ));
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Налаштування пайплайну обробки запитів
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                // The default HSTS value is 30 days. You may want to change this for production scenarios.
                 app.UseHsts();
             }
 
@@ -26,10 +36,12 @@ namespace First_Lesson_ASP
 
             app.UseAuthorization();
 
+            // Маршрутизація для MVC
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            // Запуск додатка
             app.Run();
         }
     }

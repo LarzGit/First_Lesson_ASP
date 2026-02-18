@@ -1,10 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using First_Lesson_ASP.Entities;
+using First_Lesson_ASP.DB;           // ← додай using
 
 namespace First_Lesson_ASP.Controllers
 {
     public class AboutController : Controller
     {
+        private readonly RestDBContext _context;     // ← додай поле
+
+        public AboutController(RestDBContext context)   // ← додай конструктор
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public IActionResult About()
         {
@@ -19,15 +27,26 @@ namespace First_Lesson_ASP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ContactUs(ClientMessage model)
+        public async Task<IActionResult> ContactUs(ClientMessage model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-              
-                return View("Thanks", model);
+                return View(model);
             }
 
-            return View(model);
+            try
+            {
+                _context.ClientMessages.Add(model);
+                await _context.SaveChangesAsync();         
+
+                return View("Thanks", model);
+            }
+            catch (Exception ex)
+            {
+               
+                ModelState.AddModelError("", "Виникла помилка при збереженні. Спробуйте пізніше.");
+                return View(model);
+            }
         }
     }
 }
