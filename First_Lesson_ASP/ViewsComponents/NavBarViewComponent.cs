@@ -1,40 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using First_Lesson_ASP.DB;
 using First_Lesson_ASP.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace First_Lesson_ASP.ViewsComponents
 {
     public class NavBarViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        private readonly RestDBContext _context;
+
+        public NavBarViewComponent(RestDBContext context)
         {
-            var allNavigationItems = new List<Navigate>();
+            _context = context;
+        }
 
-      
-            allNavigationItems.Add(new Navigate() { Id = 1, Title = "Home", Href = "/", Order = 1, ProductId = null });
-            allNavigationItems.Add(new Navigate() { Id = 2, Title = "About", Href = "/About/About", Order = 2, ProductId = null });
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var allNavigations = await _context.Navigations
+                .OrderBy(n => n.Order)
+                .ToListAsync();
 
-           
-            allNavigationItems.Add(new Navigate() { Id = 3, Title = "Menu", Href = "/Menu/Index", Order = 3, ProductId = null });
-
-            allNavigationItems.Add(new Navigate() { Id = 4, Title = "Chefs", Href = "/Team/Index", Order = 4, ProductId = null });
-            allNavigationItems.Add(new Navigate() { Id = 5, Title = "Contact Us", Href = "/About/ContactUs", Order = 5, ProductId = null });
-
-            
-            allNavigationItems.Add(new Navigate() { Id = 6, Title = "Hot Dishes", Href = "/Menu/Hot", Order = 1, ProductId = 3 });
-            allNavigationItems.Add(new Navigate() { Id = 7, Title = "Cold Snacks", Href = "/Menu/Cold", Order = 2, ProductId = 3 });
-            allNavigationItems.Add(new Navigate() { Id = 8, Title = "Drinks", Href = "/Menu/Drinks", Order = 3, ProductId = 3 });
-
- 
-            var rootItems = allNavigationItems
-                .Where(x => x.ProductId == null)
-                .OrderBy(x => x.Order)
+            var rootItems = allNavigations
+                .Where(n => n.ParentId == null)
+                .OrderBy(n => n.Order)
                 .ToList();
 
             foreach (var parent in rootItems)
             {
-                BuildHierarchy(parent, allNavigationItems);
+                BuildHierarchy(parent, allNavigations);
             }
 
             return View("NavBar", rootItems);
@@ -43,8 +39,8 @@ namespace First_Lesson_ASP.ViewsComponents
         private void BuildHierarchy(Navigate parent, List<Navigate> allItems)
         {
             var children = allItems
-                .Where(x => x.ProductId == parent.Id)
-                .OrderBy(x => x.Order)
+                .Where(n => n.ParentId == parent.Id)
+                .OrderBy(n => n.Order)
                 .ToList();
 
             parent.Childs = children;

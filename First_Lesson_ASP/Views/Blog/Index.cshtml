@@ -1,0 +1,180 @@
+﻿@using First_Lesson_ASP.Entities
+@model List<Post>
+
+@{
+    ViewData["Title"] = "Our Blog";
+
+    var categories = ViewBag.Categories as List<Category> ?? new List<Category>();
+    var tags = ViewBag.Tags as List<Tag> ?? new List<Tag>();
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    string search = ViewBag.Search ?? "";
+    string sort = ViewBag.Sort ?? "newest";
+    int? categoryId = ViewBag.CategoryId;
+}
+
+<!-- Page Header -->
+<div class="container-fluid bg-dark text-white py-5 mb-5">
+    <div class="container text-center">
+        <h1 class="display-4">Our Blog</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center mb-0">
+                <li class="breadcrumb-item"><a href="/" class="text-white">Home</a></li>
+                <li class="breadcrumb-item active text-white">Blog</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container py-5">
+    <div class="row g-5">
+        <!-- Left: Post List + Pagination -->
+        <div class="col-lg-8">
+            <!-- Сортування -->
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <h3>Our Blog</h3>
+                <div>
+                    <label for="sort" class="me-2">Sort by:</label>
+                    <select id="sort" name="sort" class="form-select w-auto d-inline-block"
+                            onchange="window.location.href = '?page=1&search=@search&sort=' + this.value + (@categoryId != null ? '&categoryId=@categoryId' : '');">
+                        <option value="newest" selected="@(sort == "newest")">Newest first</option>
+                        <option value="oldest" selected="@(sort == "oldest")">Oldest first</option>
+                        <option value="az" selected="@(sort == "az")">A-Z</option>
+                        <option value="za" selected="@(sort == "za")">Z-A</option>
+                    </select>
+                </div>
+            </div>
+
+            @if (Model.Any())
+            {
+                <div class="row g-4">
+                    @foreach (var post in Model)
+                    {
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow">
+                                <img src="@post.ImgSrc" class="card-img-top" alt="@post.ImgAlt">
+                                <div class="card-body">
+                                    <h5 class="card-title">@post.Title</h5>
+                                    <p class="card-text text-muted small">
+                                        @post.DateOFPublished?.ToString("dd MMMM yyyy")
+                                    </p>
+                                    <p class="card-text">
+                                        @(post.Content.Length > 150 ? post.Content.Substring(0, 150) + "..." : post.Content)
+                                    </p>
+                                    <a href="#" class="btn btn-primary btn-sm">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Pagination -->
+                @if (totalPages > 1)
+                {
+                    <nav aria-label="Page navigation" class="mt-5">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" href="?page=@(currentPage-1)&search=@search&sort=@sort@(categoryId != null ? "&categoryId=" + categoryId : "")" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            @for (int i = 1; i <= totalPages; i++)
+                            {
+                                <li class="page-item @(i == currentPage ? "active" : "")">
+                                    <a class="page-link" href="?page=@i&search=@search&sort=@sort@(categoryId != null ? "&categoryId=" + categoryId : "")">@i</a>
+                                </li>
+                            }
+                            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                <a class="page-link" href="?page=@(currentPage+1)&search=@search&sort=@sort@(categoryId != null ? "&categoryId=" + categoryId : "")" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info text-center">
+                    No posts found. Please check back later!
+                </div>
+            }
+        </div>
+
+        <!-- Right: Sidebar -->
+        <div class="col-lg-4">
+            <!-- Search -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Search</h5>
+                    <form asp-controller="Blog" asp-action="Index" method="get">
+                        <input type="hidden" name="sort" value="@sort" />
+                        <input type="hidden" name="categoryId" value="@categoryId" />
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" placeholder="Search posts..." value="@search">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Categories (nested) -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Categories</h5>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var cat in categories)
+                        {
+                            bool isActive = ViewBag.CategoryId == cat.Id;
+                            <li class="list-group-item @(isActive ? "active bg-light" : "")">
+                                <a href="@Url.Action("Index", "Blog", new { categoryId = cat.Id, page = 1, search = search, sort = sort })"
+                                   class="text-dark fw-bold text-decoration-none">
+                                    @cat.Title
+                                </a>
+                                @if (cat.Childs != null && cat.Childs.Any())
+                                {
+                                    <ul class="list-unstyled ms-4 mt-2">
+                                        @foreach (var sub in cat.Childs)
+                                        {
+                                            bool isSubActive = ViewBag.CategoryId == sub.Id;
+                                            <li class="@(isSubActive ? "active" : "")">
+                                                <a href="@Url.Action("Index", "Blog", new { categoryId = sub.Id, page = 1, search = search, sort = sort })"
+                                                   class="text-muted text-decoration-none">
+                                                    @sub.Title
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                        @if (!categories.Any())
+                        {
+                            <li class="list-group-item text-muted">No categories yet</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Tags</h5>
+                    <div class="d-flex flex-wrap">
+                        @foreach (var tag in tags)
+                        {
+                            <a href="#" class="badge bg-primary text-white me-1 mb-1">@tag.Title</a>
+                        }
+                        @if (!tags.Any())
+                        {
+                            <span class="text-muted">No tags yet</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

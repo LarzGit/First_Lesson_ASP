@@ -6,19 +6,61 @@ namespace First_Lesson_ASP.DB
     public class RestDBContext : DbContext
     {
         public DbSet<ClientMessage> ClientMessages { get; set; }
+        public DbSet<Navigate> Navigations { get; set; }
+        public DbSet<Option> Options { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<PostTags> PostTags { get; set; }
+        public DbSet<PostCategories> PostCategories { get; set; }
 
         public RestDBContext(DbContextOptions<RestDBContext> options)
             : base(options)
         {
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Option>()
+                .HasIndex(o => o.Name)
+                .IsUnique();
+
             modelBuilder.Entity<ClientMessage>()
                 .Property(m => m.CreatedAt)
-                .HasDefaultValueSql("GETDATE()");   // ← найбезпечніший вибір для SQL Server Express
+                .HasDefaultValueSql("GETDATE()");
+
+            // --- ДОДАНО: Налаштування зв'язків ---
+
+            // Зв'язок багато-до-багатьох: Post <-> Category
+            modelBuilder.Entity<Post>()
+                .HasMany(p => p.Categories)
+                .WithMany(c => c.Posts)
+                .UsingEntity<PostCategories>(
+                    j => j.HasOne<Category>().WithMany().HasForeignKey(pc => pc.CategoryId),
+                    j => j.HasOne<Post>().WithMany().HasForeignKey(pc => pc.PostId),
+                    j =>
+                    {
+                        // ЯВНО вказуємо назву таблиці, щоб уникнути помилки "CategoryPost"
+                        j.ToTable("PostCategories");
+                        // Створюємо комбінований первинний ключ
+                        j.HasKey(pc => new { pc.PostId, pc.CategoryId });
+                    });
+
+            // Зв'язок багато-до-багатьох: Post <-> Tag
+            modelBuilder.Entity<Post>()
+                .HasMany(p => p.Tags)
+                .WithMany(t => t.Posts)
+                .UsingEntity<PostTags>(
+                    j => j.HasOne<Tag>().WithMany().HasForeignKey(pt => pt.TagId),
+                    j => j.HasOne<Post>().WithMany().HasForeignKey(pt => pt.PostId),
+                    j =>
+                    {
+                        j.ToTable("PostTags");
+                        j.HasKey(pt => new { pt.PostId, pt.TagId });
+                    });
         }
     }
 }

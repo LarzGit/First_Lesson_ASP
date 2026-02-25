@@ -1,57 +1,7 @@
 ﻿@using First_Lesson_ASP.Entities
-@using Microsoft.AspNetCore.Html
-@model IEnumerable<Navigate>
+
+@model List<Navigate>
 
 <div class="navbar-nav ms-auto py-0 pe-4">
-    @foreach (var item in Model)
-    {
-        @RenderMenuItem(item, true)
-    }
+    @await Html.PartialAsync("_NavMenuItems", Model)
 </div>
-
-@functions {
-    public IHtmlContent RenderMenuItem(Navigate item, bool isRoot)
-    {
-        if (item.Childs != null && item.Childs.Any())
-        {
-            return BuildDropdown(item, isRoot);
-        }
-        else
-        {
-            return BuildSimpleLink(item, isRoot);
-        }
-    }
-
-    private IHtmlContent BuildSimpleLink(Navigate item, bool isRoot)
-    {
-        string cssClass = isRoot ? "nav-item nav-link" : "dropdown-item";
-        string html = $"<a href='{item.Href}' class='{cssClass}'>{item.Title}</a>";
-        return new HtmlString(html);
-    }
-
-    private IHtmlContent BuildDropdown(Navigate item, bool isRoot)
-    {
-        string parentClass = isRoot ? "nav-item nav-link" : "dropdown-item";
-        string menuClass = isRoot ? "dropdown-menu m-0" : "dropdown-menu submenu";
-        string containerClass = isRoot ? "nav-item dropdown" : "dropdown-submenu position-relative";
-        string arrow = isRoot ? "" : "&raquo;";
-
-        string childHtml = "";
-        foreach (var child in item.Childs)
-        {
-            childHtml += RenderMenuItem(child, false).ToString();
-        }
-
-        string html = $@"
-            <div class='{containerClass}'>
-                <a href='{item.Href}' class='{parentClass} dropdown-toggle' data-bs-toggle='dropdown'>
-                {item.Title} {arrow}
-                </a>
-                <div class='{menuClass}'>
-                {childHtml}
-                </div>
-            </div>";
-
-        return new HtmlString(html);
-    }
-}

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using First_Lesson_ASP.DB;  // ? обов'язково додай цей using
+using First_Lesson_ASP.DB;
 
 namespace First_Lesson_ASP
 {
@@ -9,23 +9,25 @@ namespace First_Lesson_ASP
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Додаємо підтримку контролерів та представлень (MVC)
             builder.Services.AddControllersWithViews();
 
-            // Реєстрація контексту бази даних
-            // Використовуємо існуючий ключ "RestDBConection" з appsettings.json
             builder.Services.AddDbContext<RestDBContext>(options =>
                 options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("RestDBConection")
+                    builder.Configuration.GetConnectionString("RestDBConnection")
                 ));
 
             var app = builder.Build();
 
-            // Налаштування пайплайну обробки запитів
+            // Запускаємо сидінг даних один раз (можна закоментувати після першого запуску)
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<RestDBContext>();
+                DbInitializer.Initialize(context);
+            }
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios.
                 app.UseHsts();
             }
 
@@ -36,12 +38,10 @@ namespace First_Lesson_ASP
 
             app.UseAuthorization();
 
-            // Маршрутизація для MVC
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            // Запуск додатка
             app.Run();
         }
     }

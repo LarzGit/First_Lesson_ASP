@@ -1,0 +1,25 @@
+﻿@using First_Lesson_ASP.Entities
+
+@model List<Navigate>
+
+@foreach (var nav in Model)
+{
+    if (nav.Childs == null || !nav.Childs.Any())
+    {
+        <a class="nav-item nav-link" href="@nav.Href">@nav.Title</a>
+    }
+    else
+    {
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_@nav.Id" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @nav.Title
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown_@nav.Id">
+                @foreach (var child in nav.Childs)
+                {
+                    <li><a class="dropdown-item" href="@child.Href">@child.Title</a></li>
+                }
+            </ul>
+        </div>
+    }
+}
