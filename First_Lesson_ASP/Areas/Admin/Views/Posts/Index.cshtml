@@ -1,0 +1,74 @@
+﻿@using First_Lesson_ASP.Entities
+@model List<First_Lesson_ASP.Entities.Post>
+
+@{
+    ViewData["Title"] = "Керування постами";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // ← Обов'язково підключаємо дизайн сайту
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-file-earmark-text me-2"></i> Всі пости</h2>
+        <div>
+            <a asp-action="Create" class="btn btn-success shadow-sm me-2">
+                <i class="bi bi-plus-lg me-1"></i> Створити пост
+            </a>
+            <a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                <i class="bi bi-arrow-left me-1"></i> Назад в меню
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-light border text-center text-muted p-5 shadow-sm rounded">
+            <h4><i class="bi bi-journal-x mb-3 fs-1"></i></h4>
+            <p>Поки що немає постів. Будьте першим, хто створить новий запис!</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-hover align-middle bg-white mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="ps-3">Заголовок</th>
+                        <th>Статус</th>
+                        <th>Дата</th>
+                        <th class="text-center">Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var post in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold ps-3">@post.Title</td>
+                            <td>
+                                @* Динамічний колір бейджа залежно від статусу *@
+                                @{
+                                    var badgeClass = post.Status == PostStatuses.Published ? "bg-success" :
+                                    post.Status == PostStatuses.Draft ? "bg-warning text-dark" :
+                                    post.Status == PostStatuses.Archived ? "bg-secondary" : "bg-primary";
+                                }
+                                <span class="badge @badgeClass fs-6">@post.Status</span>
+                            </td>
+                            <td class="small text-muted">@post.DateOFCreated.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Edit" asp-route-id="@post.Id" class="btn btn-sm btn-outline-primary" title="Редагувати">
+                                        <i class="bi bi-pencil"></i> Редагувати
+                                    </a>
+                                    <form asp-action="Delete" asp-route-id="@post.Id" method="post" class="d-inline" onsubmit="return confirm('Видалити пост @post.Title?')">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Видалити">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

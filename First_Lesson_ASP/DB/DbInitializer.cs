@@ -10,7 +10,7 @@ namespace First_Lesson_ASP.DB
     {
         public static void Initialize(RestDBContext context)
         {
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
 
             if (context.Navigations.Any())
             {
@@ -22,27 +22,25 @@ namespace First_Lesson_ASP.DB
             SeedCategories(context);
             SeedTags(context);
             SeedPosts(context);
-            SeedPostCategories(context);
-            SeedPostTags(context);
+            SeedPostCategoriesAndTags(context);
+            SeedComments(context);
         }
 
         private static void SeedNavigations(RestDBContext context)
         {
             var navigations = new List<Navigate>
             {
-                new Navigate { Title = "Home", Href = "/", Order = 1, ParentId = null },
-                new Navigate { Title = "Pages", Href = "#", Order = 2, ParentId = null },
-                new Navigate { Title = "About Us", Href = "/About/About", Order = 1, ParentId = 2 },
-                new Navigate { Title = "Our Chefs", Href = "/Team", Order = 2, ParentId = 2 },
-                new Navigate { Title = "Blog", Href = "/Blog/Index", Order = 3, ParentId = 2 },
-                new Navigate { Title = "Testimonials", Href = "/Testimonials", Order = 4, ParentId = 2 },
-                new Navigate { Title = "Contact Us", Href = "/About/ContactUs", Order = 5, ParentId = 2 },
-                new Navigate { Title = "Menu", Href = "/Menu", Order = 3, ParentId = null },
-                new Navigate { Title = "Breakfast", Href = "/Menu/Breakfast", Order = 1, ParentId = 8 },
-                new Navigate { Title = "Lunch", Href = "/Menu/Lunch", Order = 2, ParentId = 8 },
-                new Navigate { Title = "Dinner", Href = "/Menu/Dinner", Order = 3, ParentId = 8 },
-                new Navigate { Title = "Chefs", Href = "/Team", Order = 4, ParentId = null },
-                new Navigate { Title = "Contact", Href = "/About/ContactUs", Order = 5, ParentId = null }
+                new Navigate { Id = 1, Title = "Home", Href = "/", Order = 1, ParentId = null },
+                new Navigate { Id = 2, Title = "About", Href = "/About/About", Order = 2, ParentId = null },
+                new Navigate { Id = 3, Title = "Menu", Href = "/Menu", Order = 3, ParentId = null },
+                new Navigate { Id = 4, Title = "Blog", Href = "/Blog", Order = 4, ParentId = null },
+                new Navigate { Id = 5, Title = "Contact", Href = "/About/ContactUs", Order = 5, ParentId = null },
+                new Navigate { Id = 6, Title = "Services", Href = "/Services", Order = 6, ParentId = null, Childs = new List<Navigate>
+                {
+                    new Navigate { Id = 7, Title = "Catering", Href = "/Services/Catering", Order = 1, ParentId = 6 },
+                    new Navigate { Id = 8, Title = "Events", Href = "/Services/Events", Order = 2, ParentId = 6 }
+                }},
+                new Navigate { Id = 9, Title = "Chefs", Href = "/Chefs", Order = 7, ParentId = null }
             };
 
             context.Navigations.AddRange(navigations);
@@ -53,12 +51,11 @@ namespace First_Lesson_ASP.DB
         {
             var options = new List<Option>
             {
-                new Option { Name = "SITE_TITLE", Key = "site", Value = "Chefer", Relation = "site-info", Order = 1, IsSystem = true },
-                new Option { Name = "SITE_LOGO", Key = "site", Value = "/img/favicon.ico", Relation = "site-info", Order = 2, IsSystem = true },
-                new Option { Name = "CONTACT_EMAIL", Key = "contact", Value = "info@example.com", Relation = "contact-info", Order = 1, IsSystem = false },
-                new Option { Name = "CONTACT_PHONE", Key = "contact", Value = "+012 345 6789", Relation = "contact-info", Order = 2, IsSystem = false },
-                new Option { Name = "SOCIAL_TWITTER", Key = "social", Value = "https://twitter.com", Relation = "social-links", Order = 1, IsSystem = false },
-                new Option { Name = "SOCIAL_FACEBOOK", Key = "social", Value = "https://facebook.com", Relation = "social-links", Order = 2, IsSystem = false }
+                new Option { Name = "title", Key = "site-title", Value = "Chefer", Relation = "general", Order = 1, IsSystem = true },
+                new Option { Name = "logo", Key = "site-logo", Value = "~/img/logo.png", Relation = "general", Order = 2, IsSystem = true },
+                new Option { Name = "phone", Key = "contact-phone", Value = "+012 345 6789", Relation = "contact", Order = 1 },
+                new Option { Name = "email", Key = "contact-email", Value = "info@example.com", Relation = "contact", Order = 2 },
+                new Option { Name = "address", Key = "contact-address", Value = "123 Street, New York, USA", Relation = "contact", Order = 3 }
             };
 
             context.Options.AddRange(options);
@@ -67,88 +64,175 @@ namespace First_Lesson_ASP.DB
 
         private static void SeedCategories(RestDBContext context)
         {
-            var recipes = new Category { Title = "Recipes", Slug = "recipes", ImgSrc = "/img/category-1.jpg", ImgAlt = "Recipes", Description = "Cooking recipes", ParentId = null };
-            context.Categories.Add(recipes);
-            context.SaveChanges();
+            if (context.Categories.Any()) return;
 
-            var mainDishes = new Category { Title = "Main Dishes", Slug = "main-dishes", ImgSrc = "/img/category-3.jpg", ImgAlt = "Main Dishes", Description = "Main courses", ParentId = null };
-            context.Categories.Add(mainDishes);
-            context.SaveChanges();
+            var categories = new List<Category>
+            {
+                new Category { Title = "Breakfast", Slug = "breakfast", Description = "Start your day right", ImgSrc = "~/img/category-1.jpg", ImgAlt = "Breakfast" },
+                new Category { Title = "Lunch", Slug = "lunch", Description = "Midday meals", ImgSrc = "~/img/category-2.jpg", ImgAlt = "Lunch" },
+                new Category { Title = "Dinner", Slug = "dinner", Description = "Evening delights", ImgSrc = "~/img/category-3.jpg", ImgAlt = "Dinner" },
+                new Category { Title = "Desserts", Slug = "desserts", Description = "Sweet endings", ImgSrc = "~/img/category-4.jpg", ImgAlt = "Desserts", ParentId = null }
+            };
 
-            var desserts = new Category { Title = "Desserts", Slug = "desserts", ImgSrc = "/img/category-2.jpg", ImgAlt = "Desserts", Description = "Sweet desserts", ParentId = recipes.Id };
-            context.Categories.Add(desserts);
+            context.Categories.AddRange(categories);
             context.SaveChanges();
         }
 
         private static void SeedTags(RestDBContext context)
         {
-            var cooking = new Tag { Title = "Cooking", Slug = "cooking" };
-            context.Tags.Add(cooking);
-            context.SaveChanges();
+            if (context.Tags.Any()) return;
 
-            var healthy = new Tag { Title = "Healthy", Slug = "healthy" };
-            context.Tags.Add(healthy);
-            context.SaveChanges();
+            var tags = new List<Tag>
+            {
+                new Tag { Title = "Healthy", Slug = "healthy" },
+                new Tag { Title = "Quick", Slug = "quick" },
+                new Tag { Title = "Vegetarian", Slug = "vegetarian" },
+                new Tag { Title = "Grill", Slug = "grill" },
+                new Tag { Title = "Italian", Slug = "italian" }
+            };
 
-            var quick = new Tag { Title = "Quick", Slug = "quick" };
-            context.Tags.Add(quick);
+            context.Tags.AddRange(tags);
             context.SaveChanges();
         }
 
         private static void SeedPosts(RestDBContext context)
         {
+            if (context.Posts.Any()) return;
+
             var posts = new List<Post>
             {
-                new Post { Title = "How to Make Perfect Steak", Content = "Step by step guide...", Slogan = "Perfect steak every time", Slug = "perfect-steak", ImgSrc = "/img/blog-1.jpg", ImgAlt = "Steak", DateOFCreated = DateTime.Now, DateOFPublished = DateTime.Now, DateOFLastUpdated = DateTime.Now, Status = PostStatuses.Published },
-                new Post { Title = "Best Dessert Recipes", Content = "Delicious desserts...", Slogan = "Sweet treats", Slug = "dessert-recipes", ImgSrc = "/img/blog-2.jpg", ImgAlt = "Dessert", DateOFCreated = DateTime.Now, DateOFPublished = DateTime.Now, DateOFLastUpdated = DateTime.Now, Status = PostStatuses.Published },
-                // ... додай інші пости, якщо потрібно, але для тесту вистачить 2
+                new Post
+                {
+                    Title = "The Art of Perfect Steak",
+                    Content = "Detailed guide on how to cook the perfect steak at home. From choosing the cut to resting time...",
+                    Slogan = "Master the grill like a pro chef",
+                    Slug = "the-art-of-perfect-steak",
+                    Status = PostStatuses.Published,
+                    ImgSrc = "~/img/menu-1.jpg",
+                    ImgAlt = "Perfect grilled steak",
+                    DateOFCreated = DateTime.UtcNow,
+                    DateOFPublished = DateTime.UtcNow.AddDays(-10),
+                    DateOFLastUpdated = DateTime.UtcNow
+                },
+                new Post
+                {
+                    Title = "Healthy Breakfast Ideas",
+                    Content = "Five nutritious breakfast recipes that are quick and delicious. Perfect for busy mornings...",
+                    Slogan = "Fuel your body the right way",
+                    Slug = "healthy-breakfast-ideas",
+                    Status = PostStatuses.Published,
+                    ImgSrc = "~/img/menu-2.jpg",
+                    ImgAlt = "Healthy breakfast plate",
+                    DateOFCreated = DateTime.UtcNow,
+                    DateOFPublished = DateTime.UtcNow.AddDays(-5),
+                    DateOFLastUpdated = DateTime.UtcNow
+                },
+                new Post
+                {
+                    Title = "Classic Italian Pasta Carbonara",
+                    Content = "Authentic Roman carbonara recipe without cream. Just eggs, cheese, guanciale and black pepper...",
+                    Slogan = "Taste of Italy in your kitchen",
+                    Slug = "classic-italian-pasta-carbonara",
+                    Status = PostStatuses.Published,
+                    ImgSrc = "~/img/menu-3.jpg",
+                    ImgAlt = "Italian pasta carbonara",
+                    DateOFCreated = DateTime.UtcNow,
+                    DateOFPublished = DateTime.UtcNow.AddDays(-2),
+                    DateOFLastUpdated = DateTime.UtcNow
+                }
             };
 
             context.Posts.AddRange(posts);
             context.SaveChanges();
         }
 
-        private static void SeedPostCategories(RestDBContext context)
+        private static void SeedPostCategoriesAndTags(RestDBContext context)
         {
             var posts = context.Posts.ToList();
             var categories = context.Categories.ToList();
+            var tags = context.Tags.ToList();
 
-            var mainDishesId = categories.FirstOrDefault(c => c.Title == "Main Dishes")?.Id ?? 0;
-            var dessertsId = categories.FirstOrDefault(c => c.Title == "Desserts")?.Id ?? 0;
-            var recipesId = categories.FirstOrDefault(c => c.Title == "Recipes")?.Id ?? 0;
+            if (!posts.Any() || !categories.Any() || !tags.Any()) return;
 
             var postCategories = new List<PostCategories>();
+            var postTags = new List<PostTags>();
 
-            // Прив’язуємо пости до категорій (можна розширити на всі 42)
-            if (posts.Any())
+            var breakfastCat = categories.FirstOrDefault(c => c.Slug == "breakfast");
+            var grillTag = tags.FirstOrDefault(t => t.Slug == "grill");
+            var healthyTag = tags.FirstOrDefault(t => t.Slug == "healthy");
+
+            if (breakfastCat != null && posts.Count > 1)
             {
-                postCategories.Add(new PostCategories { PostId = posts.First().Id, CategoryId = mainDishesId });
-                postCategories.Add(new PostCategories { PostId = posts.Last().Id, CategoryId = dessertsId });
+                postCategories.Add(new PostCategories { PostId = posts[1].Id, CategoryId = breakfastCat.Id });
+            }
+
+            if (grillTag != null && posts.Count > 0)
+            {
+                postTags.Add(new PostTags { PostId = posts[0].Id, TagId = grillTag.Id });
+            }
+
+            if (healthyTag != null && posts.Count > 1)
+            {
+                postTags.Add(new PostTags { PostId = posts[1].Id, TagId = healthyTag.Id });
             }
 
             context.PostCategories.AddRange(postCategories);
+            context.PostTags.AddRange(postTags);
             context.SaveChanges();
         }
 
-        private static void SeedPostTags(RestDBContext context)
+        private static void SeedComments(RestDBContext context)
         {
+            if (context.Comments.Any()) return;
+
             var posts = context.Posts.ToList();
-            var tags = context.Tags.ToList();
+            if (!posts.Any()) return;
 
-            var cookingId = tags.FirstOrDefault(t => t.Title == "Cooking")?.Id ?? 0;
-            var healthyId = tags.FirstOrDefault(t => t.Title == "Healthy")?.Id ?? 0;
-            var quickId = tags.FirstOrDefault(t => t.Title == "Quick")?.Id ?? 0;
+            var steakPost = posts.FirstOrDefault(p => p.Slug == "the-art-of-perfect-steak");
+            if (steakPost == null) return;
 
-            var postTags = new List<PostTags>();
-
-            if (posts.Any())
+            var comments = new List<Comment>
             {
-                postTags.Add(new PostTags { PostId = posts.First().Id, TagId = cookingId });
-                postTags.Add(new PostTags { PostId = posts.Last().Id, TagId = healthyId });
-            }
+                new Comment
+                {
+                    Name = "Anna Chef",
+                    Email = "anna@example.com",
+                    Message = "This recipe changed my weekend BBQs forever! Thank you so much!",
+                    DateOfPublished = DateTime.UtcNow.AddDays(-9),
+                    IsValid = true,
+                    PostId = steakPost.Id
+                },
+                new Comment
+                {
+                    Name = "Mike GrillMaster",
+                    Email = "mike@example.com",
+                    Message = "What internal temperature do you recommend for medium-rare?",
+                    DateOfPublished = DateTime.UtcNow.AddDays(-8),
+                    IsValid = true,
+                    PostId = steakPost.Id
+                }
+            };
 
-            context.PostTags.AddRange(postTags);
+            context.Comments.AddRange(comments);
             context.SaveChanges();
+
+            var question = context.Comments.FirstOrDefault(c => c.Message.Contains("temperature"));
+            if (question != null)
+            {
+                var reply = new Comment
+                {
+                    Name = "John Doe",
+                    Email = "john@example.com",
+                    Message = "For medium-rare, aim for 130-135°F (54-57°C) internal temperature. Don't forget to rest the steak 5-10 minutes after grilling!",
+                    DateOfPublished = DateTime.UtcNow.AddDays(-7),
+                    IsValid = true,
+                    PostId = steakPost.Id,
+                    ParentId = question.Id
+                };
+
+                context.Comments.Add(reply);
+                context.SaveChanges();
+            }
         }
     }
 }

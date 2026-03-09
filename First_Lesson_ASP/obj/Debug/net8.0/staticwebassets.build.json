@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Yx7C+a6hxVSFMzZiTzXLfbD9wbCywfIDQ3dZRYqTHes=",
+  "Hash": "iowBG0Re8723bjQckiIvauCHnEQzSI+dfizVxnriKgc=",
   "Source": "First_Lesson_ASP",
   "BasePath": "_content/First_Lesson_ASP",
   "Mode": "Default",
@@ -582,6 +582,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\img\\testimonial-2.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\js\\comments.js",
+      "SourceId": "First_Lesson_ASP",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\",
+      "BasePath": "_content/First_Lesson_ASP",
+      "RelativePath": "js/comments#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "oa7fu84dq3",
+      "Integrity": "UK9zP26/G3GWC4Nkyx3VDLml/3emP+jMYQcTO7LcJsI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\comments.js"
     },
     {
       "Identity": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\js\\main.js",
@@ -4214,7 +4235,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 09 Feb 2026 17:18:11 GMT"
+          "Value": "Mon, 09 Mar 2026 14:31:39 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4251,7 +4272,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 09 Feb 2026 17:18:11 GMT"
+          "Value": "Mon, 09 Mar 2026 14:31:39 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4296,7 +4317,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 09 Feb 2026 17:18:11 GMT"
+          "Value": "Mon, 09 Mar 2026 14:31:39 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4341,7 +4362,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 09 Feb 2026 17:18:11 GMT"
+          "Value": "Mon, 09 Mar 2026 14:31:39 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -6156,6 +6177,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-79U0M4Q+CpJfD3qNqi5Mv1+Ky5dCkjlOyBQsgdwknrA="
+        }
+      ]
+    },
+    {
+      "Route": "js/comments.js",
+      "AssetFile": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\js\\comments.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1784"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UK9zP26/G3GWC4Nkyx3VDLml/3emP+jMYQcTO7LcJsI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 09 Mar 2026 12:53:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-UK9zP26/G3GWC4Nkyx3VDLml/3emP+jMYQcTO7LcJsI="
+        }
+      ]
+    },
+    {
+      "Route": "js/comments.oa7fu84dq3.js",
+      "AssetFile": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\js\\comments.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1784"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UK9zP26/G3GWC4Nkyx3VDLml/3emP+jMYQcTO7LcJsI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 09 Mar 2026 12:53:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "oa7fu84dq3"
+        },
+        {
+          "Name": "label",
+          "Value": "js/comments.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-UK9zP26/G3GWC4Nkyx3VDLml/3emP+jMYQcTO7LcJsI="
         }
       ]
     },

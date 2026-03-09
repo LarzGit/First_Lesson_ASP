@@ -23,6 +23,7 @@ wwwroot\img\team-3.jpg
 wwwroot\img\testimonial.jpg
 wwwroot\img\testimonial-1.jpg
 wwwroot\img\testimonial-2.jpg
+wwwroot\js\comments.js
 wwwroot\js\main.js
 wwwroot\lib\animate\animate.css
 wwwroot\lib\animate\animate.min.css

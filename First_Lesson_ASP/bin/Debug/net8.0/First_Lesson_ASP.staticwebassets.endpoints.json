@@ -29,7 +29,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 09 Feb 2026 17:18:11 GMT"
+          "Value": "Mon, 09 Mar 2026 14:31:39 GMT"
         }
       ],
       "EndpointProperties": [
@@ -74,7 +74,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 09 Feb 2026 17:18:11 GMT"
+          "Value": "Mon, 09 Mar 2026 14:31:39 GMT"
         }
       ],
       "EndpointProperties": [
@@ -2131,6 +2131,88 @@
         {
           "Name": "label",
           "Value": "img/testimonial.jpg"
+        }
+      ]
+    },
+    {
+      "Route": "js/comments.js",
+      "AssetFile": "js/comments.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1784"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UK9zP26/G3GWC4Nkyx3VDLml/3emP+jMYQcTO7LcJsI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 09 Mar 2026 12:53:32 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-UK9zP26/G3GWC4Nkyx3VDLml/3emP+jMYQcTO7LcJsI="
+        }
+      ]
+    },
+    {
+      "Route": "js/comments.oa7fu84dq3.js",
+      "AssetFile": "js/comments.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1784"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UK9zP26/G3GWC4Nkyx3VDLml/3emP+jMYQcTO7LcJsI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 09 Mar 2026 12:53:32 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "oa7fu84dq3"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-UK9zP26/G3GWC4Nkyx3VDLml/3emP+jMYQcTO7LcJsI="
+        },
+        {
+          "Name": "label",
+          "Value": "js/comments.js"
         }
       ]
     },

@@ -1,0 +1,79 @@
+﻿@model First_Lesson_ASP.Entities.Post
+
+@{
+    // БЕЗПЕЧНА ПЕРЕВІРКА: якщо Model порожній, ми просто створюємо новий пост
+    bool isNew = Model == null || Model.Id == 0;
+
+    ViewData["Title"] = isNew ? "Створити пост" : "Редагувати пост";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="bi @(isNew ? "bi-plus-square" : "bi-pencil-square") me-2 text-primary"></i>
+            @(isNew ? "Створити пост" : "Редагувати пост")
+        </h2>
+        <a asp-area="Admin" asp-controller="Posts" asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+            <i class="bi bi-arrow-left me-1"></i> Назад до списку
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
+            <form asp-area="Admin" asp-controller="Posts" asp-action="@(isNew ? "Create" : "Edit")" method="post">
+
+                @* Ховаємо Id тільки якщо ми редагуємо існуючий пост *@
+                @if (!isNew)
+                {
+                    <input type="hidden" asp-for="Id" />
+                }
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Title" class="form-label fw-bold">Заголовок <span class="text-danger">*</span></label>
+                        <input asp-for="Title" class="form-control bg-light" required />
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Slug" class="form-label fw-bold">Slug (для URL) <span class="text-danger">*</span></label>
+                        <input asp-for="Slug" class="form-control bg-light" required />
+                        <span asp-validation-for="Slug" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Slogan" class="form-label fw-bold">Слоган</label>
+                    <input asp-for="Slogan" class="form-control bg-light" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Content" class="form-label fw-bold">Вміст <span class="text-danger">*</span></label>
+                    <textarea asp-for="Content" class="form-control bg-light" rows="12" required></textarea>
+                    <span asp-validation-for="Content" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Status" class="form-label fw-bold">Статус</label>
+                    <select asp-for="Status" class="form-select bg-light w-auto">
+                        <option value="0">New</option>
+                        <option value="1">Draft</option>
+                        <option value="2">Published</option>
+                        <option value="3">Archived</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-end border-top pt-3">
+                    <button type="submit" class="btn btn-success px-4 shadow-sm">
+                        <i class="bi bi-check-lg me-1"></i> Зберегти
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

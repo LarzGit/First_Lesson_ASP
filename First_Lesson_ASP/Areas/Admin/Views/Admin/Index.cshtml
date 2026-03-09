@@ -1,0 +1,51 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Адмін-панель";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Адмін-панель</h1>
+    <p class="lead text-center">Вітаємо, @User.Identity?.Name!</p>
+
+    <div class="row justify-content-center g-4">
+        @* Картка для керування постами *@
+        <div class="col-md-5 col-lg-4">
+            <div class="card shadow h-100 border-0">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3 text-primary">
+                        <i class="bi bi-file-earmark-post fs-1"></i>
+                    </div>
+                    <h5 class="card-title">Пости</h5>
+                    <p class="card-text text-muted">Додавання, редагування та повне керування статтями блогу.</p>
+                    @* asp-controller="Posts" звертається до твого PostsController.cs *@
+                    <a asp-area="Admin" asp-controller="Posts" asp-action="Index" class="btn btn-primary w-100 shadow-sm">Перейти</a>
+                </div>
+            </div>
+        </div>
+
+        @* Картка для керування коментарями *@
+        <div class="col-md-5 col-lg-4">
+            <div class="card shadow h-100 border-0">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3 text-success">
+                        <i class="bi bi-chat-left-dots fs-1"></i>
+                    </div>
+                    <h5 class="card-title">Коментарі</h5>
+                    <p class="card-text text-muted">Перегляд, схвалення та видалення відгуків користувачів.</p>
+                    @* asp-controller="Comments" потребує наявності CommentsController.cs *@
+                    <a asp-area="Admin" asp-controller="Comments" asp-action="Index" class="btn btn-primary w-100 shadow-sm">Перейти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Кнопка безпечного виходу *@
+    <div class="text-center mt-5">
+        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-outline-danger px-4">
+                <i class="bi bi-box-arrow-right me-2"></i>Вийти з адмінки
+            </button>
+        </form>
+    </div>
+</div>

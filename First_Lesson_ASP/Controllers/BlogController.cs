@@ -17,28 +17,41 @@ namespace First_Lesson_ASP.Controllers
             _context = context;
         }
 
-        public IActionResult Index(int page = 1, string search = null, string sort = "newest", int? categoryId = null)
+        // Список постів з пагінацією, пошуком, сортуванням, фільтрами за категорією та тегом
+        public IActionResult Index(
+            int page = 1,
+            string? search = null,
+            string? sort = "newest",
+            int? categoryId = null,
+            int? tagId = null)
         {
             const int pageSize = 4;
 
-            // Базовий запит із завантаженням зв'язків
             var query = _context.Posts
                 .Include(p => p.Categories)
                 .Include(p => p.Tags)
                 .Where(p => p.Status == PostStatuses.Published);
 
-            // Фільтр пошуку
-            if (!string.IsNullOrEmpty(search))
+            // Пошук за заголовком або вмістом
+            if (!string.IsNullOrWhiteSpace(search))
             {
-                var s = search.ToLower();
-                query = query.Where(p => p.Title.ToLower().Contains(s) || p.Content.ToLower().Contains(s));
+                var s = search.Trim().ToLower();
+                query = query.Where(p =>
+                    p.Title.ToLower().Contains(s) ||
+                    p.Content.ToLower().Contains(s));
             }
 
-            // Фільтр категорій
+            // Фільтр за категорією (включаючи підкатегорії)
             if (categoryId.HasValue)
             {
                 var categoryIds = GetCategoryAndChildrenIds(categoryId.Value);
                 query = query.Where(p => p.Categories.Any(c => categoryIds.Contains(c.Id)));
+            }
+
+            // Фільтр за тегом
+            if (tagId.HasValue)
+            {
+                query = query.Where(p => p.Tags.Any(t => t.Id == tagId.Value));
             }
 
             // Сортування
@@ -51,40 +64,84 @@ namespace First_Lesson_ASP.Controllers
             };
 
             var totalPosts = query.Count();
+
             var posts = query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .AsNoTracking()
                 .ToList();
 
-            // Передаємо дані у View
+            // Дані для ViewBag (для фільтрів і пагінації)
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = (int)Math.Ceiling((double)totalPosts / pageSize);
             ViewBag.Search = search;
             ViewBag.Sort = sort;
             ViewBag.CategoryId = categoryId;
+            ViewBag.TagId = tagId;
 
-            // Тільки головні категорії для меню
             ViewBag.Categories = _context.Categories
                 .Where(c => c.ParentId == null)
                 .Include(c => c.Childs)
+                .AsNoTracking()
                 .ToList();
 
-            ViewBag.Tags = _context.Tags.ToList();
+            ViewBag.Tags = _context.Tags
+                .AsNoTracking()
+                .ToList();
 
             return View(posts);
         }
 
-        // Окремий метод (ТІЛЬКИ ОДИН!)
+        // Деталі посту — тепер підтримує як Id, так і slug (для красивих URL)
+        public IActionResult Details(string? id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return NotFound();
+            }
+
+            Post? post;
+
+            // Спробуємо спочатку як Id (число)
+            if (int.TryParse(id, out int parsedId))
+            {
+                post = _context.Posts
+                    .Include(p => p.Categories)
+                    .Include(p => p.Tags)
+                    .Include(p => p.Comments.Where(c => c.IsValid)) // ← готуємося до коментарів
+                    .FirstOrDefault(p => p.Id == parsedId);
+            }
+            else
+            {
+                // Якщо не число — вважаємо slug
+                post = _context.Posts
+                    .Include(p => p.Categories)
+                    .Include(p => p.Tags)
+                    .Include(p => p.Comments.Where(c => c.IsValid))
+                    .FirstOrDefault(p => p.Slug.ToLower() == id.ToLower());
+            }
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+        }
+
+        // Рекурсивний метод для отримання всіх ID підкатегорій
         private List<int> GetCategoryAndChildrenIds(int catId)
         {
-            var all = _context.Categories.AsNoTracking().ToList();
+            var all = _context.Categories
+                .AsNoTracking()
+                .ToList();
+
             var ids = new List<int>();
 
-            void Walk(int id)
+            void Walk(int currentId)
             {
-                ids.Add(id);
-                var children = all.Where(c => c.ParentId == id).Select(c => c.Id);
+                ids.Add(currentId);
+                var children = all.Where(c => c.ParentId == currentId).Select(c => c.Id).ToList();
                 foreach (var childId in children) Walk(childId);
             }
 

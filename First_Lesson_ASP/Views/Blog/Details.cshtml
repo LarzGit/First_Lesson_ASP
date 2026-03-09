@@ -1,0 +1,126 @@
+﻿@using First_Lesson_ASP.Entities
+@model Post
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container-fluid bg-dark text-white py-5 mb-5">
+    <div class="container text-center">
+        <h1 class="display-4">@Model.Title</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center mb-0">
+                <li class="breadcrumb-item"><a href="/" class="text-white">Home</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Blog")" class="text-white">Blog</a></li>
+                <li class="breadcrumb-item active text-white" aria-current="page">@Model.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            @if (!string.IsNullOrEmpty(Model.ImgSrc))
+            {
+                <img src="@Url.Content(Model.ImgSrc)" alt="@Model.ImgAlt" class="img-fluid rounded mb-4 shadow" style="width: 100%; max-height: 500px; object-fit: cover;">
+            }
+
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                <span class="text-muted">
+                    <i class="bi bi-calendar"></i>
+                    @Model.DateOFPublished?.ToString("dd MMMM yyyy")
+                    @if (Model.DateOFLastUpdated != Model.DateOFCreated)
+                    {
+                        <small class="ms-2">(оновлено @Model.DateOFLastUpdated.ToString("dd.MM.yyyy HH:mm"))</small>
+                    }
+                </span>
+                <div>
+                    @if (Model.Categories != null && Model.Categories.Any())
+                    {
+                        foreach (var cat in Model.Categories)
+                        {
+                            <span class="badge bg-secondary me-1">@cat.Title</span>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="post-content fs-5 mb-5" style="line-height: 1.8;">
+                @Html.Raw(Model.Content)
+            </div>
+
+            @if (Model.Tags != null && Model.Tags.Any())
+            {
+                <div class="mt-5 border-top pt-3">
+                    <strong>Tags:</strong>
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <a href="@Url.Action("Index", "Blog", new { tagId = tag.Id })"
+                           class="badge bg-light text-dark border text-decoration-none me-1">
+                            #@(tag.Title)
+                        </a>
+                    }
+                </div>
+            }
+
+            <div class="mt-5 mb-5 border-bottom pb-5">
+                <a href="@Url.Action("Index", "Blog")" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i> Back to Blog
+                </a>
+            </div>
+
+            <section class="comments-section pt-4">
+                <div class="d-flex align-items-center mb-4">
+                    <h3 class="mb-0">Коментарі</h3>
+                    <span class="badge bg-primary ms-3 fs-6">
+                        @Model.Comments.Count(c => c.IsValid)
+                    </span>
+                </div>
+
+                <div id="comments-list" class="mb-5">
+                    @await Component.InvokeAsync("CommentsTree", new { postId = Model.Id })
+                </div>
+
+                <div class="card shadow-sm border-0 bg-light">
+                    <div class="card-body p-4">
+                        <h4 class="mb-4 text-primary">Додати коментар</h4>
+
+                        <form id="comment-form" asp-controller="Ajax" asp-action="AddComment" method="post">
+                            <input type="hidden" name="postId" value="@Model.Id" />
+                            <input type="hidden" name="parentId" id="parentId" value="" />
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Ім'я <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" class="form-control" required maxlength="100" placeholder="Ваше ім'я" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+                                    <input type="email" name="email" class="form-control" required maxlength="150" placeholder="example@mail.com" />
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Повідомлення <span class="text-danger">*</span></label>
+                                <textarea name="message" class="form-control" rows="4" required minlength="10" maxlength="2000" placeholder="Напишіть щось цікаве..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary px-4 py-2 shadow-sm">
+                                <i class="bi bi-send me-2"></i> Надіслати коментар
+                            </button>
+
+                            <div id="form-message" class="mt-3 alert shadow-sm" style="display:none;"></div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/comments.js"></script>
+}

@@ -105,6 +105,10 @@
       "PackagePath": "staticwebassets\\img\\testimonial.jpg"
     },
     {
+      "Id": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\js\\comments.js",
+      "PackagePath": "staticwebassets\\js\\comments.js"
+    },
+    {
       "Id": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\js\\main.js",
       "PackagePath": "staticwebassets\\js\\main.js"
     },

@@ -1,0 +1,45 @@
+﻿@using First_Lesson_ASP.Entities
+@model List<Comment>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-light border text-center text-muted">
+        Поки немає коментарів. Будьте першим!
+    </div>
+}
+else
+{
+    <div class="comments-list">
+        @* Виводимо основні коментарі *@
+        @foreach (var comment in Model.Where(c => c.ParentId == null))
+        {
+            <div class="comment mb-4 p-3 border rounded bg-light shadow-sm">
+                <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+                    <strong class="text-primary"><i class="bi bi-person-circle"></i> @comment.Name</strong>
+                    <small class="text-muted">@comment.DateOfPublished.ToString("dd.MM.yyyy HH:mm")</small>
+                </div>
+                <p class="mb-2">@comment.Message</p>
+
+                @* Вивід відповідей (replies) *@
+                @{
+                    var replies = Model.Where(c => c.ParentId == comment.Id).ToList();
+                    if (replies.Any())
+                    {
+                        <div class="replies ms-5 mt-3 border-start border-3 border-primary ps-3">
+                            @foreach (var reply in replies)
+                            {
+                                <div class="reply mb-2 p-2 bg-white rounded border">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <strong>@reply.Name</strong>
+                                        <small class="text-muted">@reply.DateOfPublished.ToString("dd.MM.yyyy")</small>
+                                    </div>
+                                    <p class="mb-0 small text-secondary">@reply.Message</p>
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        }
+    </div>
+}

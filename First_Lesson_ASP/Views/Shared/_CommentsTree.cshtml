@@ -1,0 +1,28 @@
+﻿@model List<First_Lesson_ASP.Entities.Comment>
+
+@if (Model == null || !Model.Any())
+{
+        <p class="text-muted">Ще немає коментарів. Будьте першим!</p>
+}
+else
+{
+        <div class="comments-tree">
+        @foreach (var comment in Model)
+        {
+                    <div class="comment mb-4 p-3 border rounded">
+                        <div class="d-flex justify-content-between">
+                            <strong>@comment.Name</strong>
+                            <small class="text-muted">@comment.DateOfPublished.ToString("dd.MM.yyyy HH:mm")</small>
+                        </div>
+                        <p class="mt-2">@comment.Message</p>
+
+                @if (comment.Childs != null && comment.Childs.Any())
+                {
+                                <div class="ms-4 mt-3">
+                        @await Html.PartialAsync("_CommentsTree", comment.Childs)
+                                </div>
+                }
+                    </div>
+        }
+        </div>
+}
