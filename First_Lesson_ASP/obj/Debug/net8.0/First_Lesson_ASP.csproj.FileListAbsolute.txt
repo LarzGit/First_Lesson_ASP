@@ -462,10 +462,11 @@ C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\s
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.First_Lesson_ASP.props
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.First_Lesson_ASP.props
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\First_Le.A98A598E.Up2Date
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\First_Lesson_ASP.dll
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\refint\First_Lesson_ASP.dll
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\First_Lesson_ASP.pdb
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\First_Lesson_ASP.genruntimeconfig.cache
 C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\ref\First_Lesson_ASP.dll
+C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Users\lalal\source\repos\First_Lesson_ASP\First_Lesson_ASP\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

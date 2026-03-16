@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
+п»їusing Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;          // в†ђ РЅРѕРІРёР№ using
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using Microsoft.EntityFrameworkCore;
 using First_Lesson_ASP.DB;
 using First_Lesson_ASP.Entities;
@@ -10,23 +11,22 @@ namespace First_Lesson_ASP
 {
     public class Program
     {
-        // Змінено void на async Task для підтримки await
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Додаємо MVC + Razor Views з підтримкою Runtime Compilation
+            // Р”РѕРґР°С”РјРѕ MVC + Razor Views Р· РїС–РґС‚СЂРёРјРєРѕСЋ Runtime Compilation
             builder.Services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 
-            // Підключення до бази даних
+            // РџС–РґРєР»СЋС‡РµРЅРЅСЏ РґРѕ Р±Р°Р·Рё РґР°РЅРёС…
             builder.Services.AddDbContext<RestDBContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("RestDBConnection")));
 
-            // Додаємо сервіс для коментарів
+            // Р”РѕРґР°С”РјРѕ СЃРµСЂРІС–СЃ РґР»СЏ РєРѕРјРµРЅС‚Р°СЂС–РІ
             builder.Services.AddScoped<CommentsModel>();
 
-            // Identity + Cookie Authentication
+            // Identity
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -39,6 +39,7 @@ namespace First_Lesson_ASP
             .AddEntityFrameworkStores<RestDBContext>()
             .AddDefaultTokenProviders();
 
+            // Authentication: Cookie + Google
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -48,20 +49,39 @@ namespace First_Lesson_ASP
                     options.Cookie.Name = "FirstLessonAuth";
                     options.ExpireTimeSpan = TimeSpan.FromDays(30);
                     options.SlidingExpiration = true;
+                })
+                .AddGoogle(options =>                                 // в†ђ РґРѕРґР°РЅРѕ Google
+                {
+                    // Р‘РµСЂРµРјРѕ Р·РЅР°С‡РµРЅРЅСЏ Р· appsettings.json Р°Р±Рѕ User Secrets / Environment
+                    options.ClientId = builder.Configuration["Authentication:Google:ClientId"]
+                        ?? throw new InvalidOperationException("Google ClientId РЅРµ Р·РЅР°Р№РґРµРЅРѕ РІ РєРѕРЅС„С–РіСѓСЂР°С†С–С—");
+
+                    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]
+                        ?? throw new InvalidOperationException("Google ClientSecret РЅРµ Р·РЅР°Р№РґРµРЅРѕ РІ РєРѕРЅС„С–РіСѓСЂР°С†С–С—");
+
+                    // Р’Р°Р¶Р»РёРІРѕ РґР»СЏ Identity + external providers
+                    options.SignInScheme = IdentityConstants.ExternalScheme;
+
+                    // РЇРєС– РґР°РЅС– Р·Р°РїРёС‚СѓРІР°С‚Рё РІ Google (СЃС‚Р°РЅРґР°СЂС‚РЅРёР№ РЅР°Р±С–СЂ)
+                    options.Scope.Add("profile");
+                    options.Scope.Add("email");
+
+                    // РћРїС†С–РѕРЅР°Р»СЊРЅРѕ: Р·Р±РµСЂС–РіР°С‚Рё access/refresh С‚РѕРєРµРЅРё (СЏРєС‰Рѕ РїРѕС‚СЂС–Р±РЅРѕ)
+                    // options.SaveTokens = true;
                 });
 
             var app = builder.Build();
 
-            // Автоматичне застосування міграцій + сидінг
+            // РђРІС‚РѕРјР°С‚РёС‡РЅРµ Р·Р°СЃС‚РѕСЃСѓРІР°РЅРЅСЏ РјС–РіСЂР°С†С–Р№ + СЃРёРґС–РЅРі (Р·Р°Р»РёС€РёРІ Р±РµР· Р·РјС–РЅ)
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<RestDBContext>();
 
-                // Застосовуємо міграції
+                // Р—Р°СЃС‚РѕСЃРѕРІСѓС”РјРѕ РјС–РіСЂР°С†С–С—
                 context.Database.Migrate();
 
-                // Запускаємо сидінг
+                // Р—Р°РїСѓСЃРєР°С”РјРѕ СЃРёРґС–РЅРі
                 DbInitializer.Initialize(context);
 
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
@@ -93,9 +113,10 @@ namespace First_Lesson_ASP
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseRouting();
 
-            app.UseAuthentication(); // Має бути ПЕРЕД UseAuthorization
+            app.UseAuthentication();     // РџР•Р Р•Р” UseAuthorization вЂ” РїСЂР°РІРёР»СЊРЅРѕ
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -106,10 +127,8 @@ namespace First_Lesson_ASP
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            // Асинхронний запуск додатка
-            app.MapControllerRoute(
-    name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+           
+
             await app.RunAsync();
         }
     }
