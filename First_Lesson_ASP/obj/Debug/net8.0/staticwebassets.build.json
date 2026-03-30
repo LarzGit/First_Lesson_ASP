@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "iowBG0Re8723bjQckiIvauCHnEQzSI+dfizVxnriKgc=",
+  "Hash": "grfBm2gH+5PtQcXODy7WFsYk1FqlGRJJs96rlzGTqAo=",
   "Source": "First_Lesson_ASP",
   "BasePath": "_content/First_Lesson_ASP",
   "Mode": "Default",
@@ -3963,6 +3963,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\scss\\bootstrap\\scss\\vendor\\_rfs.scss"
+    },
+    {
+      "Identity": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\uploads\\49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.jpg",
+      "SourceId": "First_Lesson_ASP",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\",
+      "BasePath": "_content/First_Lesson_ASP",
+      "RelativePath": "uploads/49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7r2vy6i8gb",
+      "Integrity": "TYZFkS3wtSWGpRhTRkNkqGb1E/ugPa2VgaAFjvXqSX8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.jpg"
     }
   ],
   "Endpoints": [
@@ -19379,6 +19400,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-ltkCWM11ZskiET9YcId8GCz/tmK3wymn8Dnyr++k/T8="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.7r2vy6i8gb.jpg",
+      "AssetFile": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\uploads\\49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "398722"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TYZFkS3wtSWGpRhTRkNkqGb1E/ugPa2VgaAFjvXqSX8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 30 Mar 2026 13:16:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7r2vy6i8gb"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-TYZFkS3wtSWGpRhTRkNkqGb1E/ugPa2VgaAFjvXqSX8="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.jpg",
+      "AssetFile": "C:\\Users\\lalal\\source\\repos\\First_Lesson_ASP\\First_Lesson_ASP\\wwwroot\\uploads\\49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "398722"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TYZFkS3wtSWGpRhTRkNkqGb1E/ugPa2VgaAFjvXqSX8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 30 Mar 2026 13:16:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-TYZFkS3wtSWGpRhTRkNkqGb1E/ugPa2VgaAFjvXqSX8="
         }
       ]
     }

@@ -5,10 +5,11 @@ using First_Lesson_ASP.Entities;
 using First_Lesson_ASP.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace First_Lesson_ASP.Controllers
 {
-    [AllowAnonymous]  // ← можна залишити на рівні контролера, бо всі дії анонімні
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -30,17 +31,14 @@ namespace First_Lesson_ASP.Controllers
             return View(new LoginViewModel());
         }
 
-        // POST: /Account/Login (локальний логін)
+        // POST: /Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
             var result = await _signInManager.PasswordSignInAsync(
                 model.Email,
@@ -48,10 +46,7 @@ namespace First_Lesson_ASP.Controllers
                 model.RememberMe,
                 lockoutOnFailure: false);
 
-            if (result.Succeeded)
-            {
-                return LocalRedirect(returnUrl ?? Url.Content("~/"));
-            }
+            if (result.Succeeded) return LocalRedirect(returnUrl ?? Url.Content("~/"));
 
             if (result.IsLockedOut)
             {
@@ -70,10 +65,8 @@ namespace First_Lesson_ASP.Controllers
         public IActionResult ExternalLogin(string provider = "Google", string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-
             var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-
             return Challenge(properties, provider);
         }
 
@@ -96,24 +89,12 @@ namespace First_Lesson_ASP.Controllers
                 return View(nameof(Login), new LoginViewModel());
             }
 
-            // Спроба увійти, якщо обліковий запис уже пов'язаний
             var signInResult = await _signInManager.ExternalLoginSignInAsync(
-                info.LoginProvider,
-                info.ProviderKey,
-                isPersistent: false,
-                bypassTwoFactor: true);
+                info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
 
-            if (signInResult.Succeeded)
-            {
-                return LocalRedirect(returnUrl);
-            }
+            if (signInResult.Succeeded) return LocalRedirect(returnUrl);
+            if (signInResult.IsLockedOut) return RedirectToAction(nameof(AccessDenied));
 
-            if (signInResult.IsLockedOut)
-            {
-                return RedirectToAction(nameof(AccessDenied));
-            }
-
-            // Новий користувач — створюємо
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             if (string.IsNullOrEmpty(email))
             {
@@ -129,33 +110,24 @@ namespace First_Lesson_ASP.Controllers
                     UserName = email,
                     Email = email,
                     EmailConfirmed = true,
-                    FullName = info.Principal.FindFirstValue(ClaimTypes.Name)
-                               ?? email.Split('@')[0]
+                    FullName = info.Principal.FindFirstValue(ClaimTypes.Name) ?? email.Split('@')[0]
                 };
 
                 var createResult = await _userManager.CreateAsync(user);
                 if (!createResult.Succeeded)
                 {
-                    foreach (var error in createResult.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    foreach (var error in createResult.Errors) ModelState.AddModelError(string.Empty, error.Description);
                     return View(nameof(Login), new LoginViewModel());
                 }
             }
 
-            // Пов'язуємо зовнішній логін з користувачем
             var addLoginResult = await _userManager.AddLoginAsync(user, info);
             if (!addLoginResult.Succeeded)
             {
-                foreach (var error in addLoginResult.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                foreach (var error in addLoginResult.Errors) ModelState.AddModelError(string.Empty, error.Description);
                 return View(nameof(Login), new LoginViewModel());
             }
 
-            // Виконуємо вхід
             await _signInManager.SignInAsync(user, isPersistent: false);
             return LocalRedirect(returnUrl);
         }
@@ -172,10 +144,7 @@ namespace First_Lesson_ASP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
             var user = new User
             {
@@ -192,11 +161,7 @@ namespace First_Lesson_ASP.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-
+            foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
             return View(model);
         }
 
@@ -214,6 +179,37 @@ namespace First_Lesson_ASP.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        // 🚨 ТИМЧАСОВИЙ МЕТОД ДЛЯ НАДАННЯ ПРАВ АДМІНА 🚨
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> MakeMeAdmin([FromServices] RoleManager<IdentityRole> roleManager)
+        {
+            string myEmail = "larzofficialgames@gmail.com";
+
+            var user = await _userManager.FindByEmailAsync(myEmail);
+            if (user == null) return Content("Користувача не знайдено!");
+
+            if (!await roleManager.RoleExistsAsync("Admin"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+
+            if (!await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                var result = await _userManager.AddToRoleAsync(user, "Admin");
+                if (!result.Succeeded)
+                {
+                    return Content("Помилка видачі ролі: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                }
+            }
+
+            return Content($@"
+                <h1>Готово!</h1>
+                <p>Користувач <b>{myEmail}</b> тепер Адміністратор!</p>
+                <b style='color:red;'>ВАЖЛИВО: Перейдіть на сайт, натисніть кнопку 'Вийти' (Logout), а потім зайдіть знову, щоб права запрацювали.</b>
+            ", "text/html");
         }
     }
 }

@@ -3366,5 +3366,23 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\scss\bootstrap\scss\_variables.scss'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>First_Lesson_ASP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/First_Lesson_ASP</BasePath>
+      <RelativePath>uploads/49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>7r2vy6i8gb</Fingerprint>
+      <Integrity>TYZFkS3wtSWGpRhTRkNkqGb1E/ugPa2VgaAFjvXqSX8=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
   </ItemGroup>
 </Project>

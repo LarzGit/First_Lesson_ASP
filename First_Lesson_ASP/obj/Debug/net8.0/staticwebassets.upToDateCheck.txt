@@ -184,3 +184,4 @@ wwwroot\scss\bootstrap\scss\mixins\_utilities.scss
 wwwroot\scss\bootstrap\scss\mixins\_visually-hidden.scss
 wwwroot\scss\bootstrap\scss\utilities\_api.scss
 wwwroot\scss\bootstrap\scss\vendor\_rfs.scss
+wwwroot\uploads\49c80b3f-45e9-4d9b-9305-bbd60b5f8f4b_7af9c0dca4f405917eb29167f9fc8a14.jpg

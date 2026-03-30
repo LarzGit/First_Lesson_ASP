@@ -1,9 +1,7 @@
-﻿@model First_Lesson_ASP.Entities.Post
+﻿@model First_Lesson_ASP.Areas.Admin.Models.PostFormViewModel
 
 @{
-    // БЕЗПЕЧНА ПЕРЕВІРКА: якщо Model порожній, ми просто створюємо новий пост
     bool isNew = Model == null || Model.Id == 0;
-
     ViewData["Title"] = isNew ? "Створити пост" : "Редагувати пост";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -21,12 +19,12 @@
 
     <div class="card shadow-sm border-0 rounded-3">
         <div class="card-body p-4">
-            <form asp-area="Admin" asp-controller="Posts" asp-action="@(isNew ? "Create" : "Edit")" method="post">
+            <form asp-area="Admin" asp-controller="Posts" asp-action="@(isNew ? "Create" : "Edit")" method="post" enctype="multipart/form-data">
 
-                @* Ховаємо Id тільки якщо ми редагуємо існуючий пост *@
                 @if (!isNew)
                 {
                     <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="ExistingImagePath" />
                 }
 
                 <div class="row">
@@ -46,6 +44,32 @@
                 <div class="mb-3">
                     <label asp-for="Slogan" class="form-label fw-bold">Слоган</label>
                     <input asp-for="Slogan" class="form-control bg-light" />
+                </div>
+
+                <div class="row border p-3 bg-light rounded mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="UploadedImage" class="form-label fw-bold">Зображення поста</label>
+                        <input asp-for="UploadedImage" type="file" class="form-control" accept="image/*" />
+
+                        @if (!string.IsNullOrEmpty(Model?.ExistingImagePath))
+                        {
+                            <div class="mt-2 text-muted small">
+                                Поточне зображення: <img src="@Model.ExistingImagePath" height="50" class="ms-2 rounded border" alt="preview" />
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="SelectedCategoryIds" class="form-label fw-bold">Категорії</label>
+                        <select asp-for="SelectedCategoryIds" asp-items="ViewBag.Categories" class="form-select" multiple style="height: 100px;">
+                        </select>
+                        <span class="small text-muted">Затисніть Ctrl, щоб обрати кілька категорій</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ImgAlt" class="form-label fw-bold">Alt-текст для зображення (SEO)</label>
+                    <input asp-for="ImgAlt" class="form-control bg-light" />
                 </div>
 
                 <div class="mb-3">
